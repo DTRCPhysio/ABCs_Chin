@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>活動特異性平衡信心量表（ABC量表）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#f5f5f7; padding:20px; }
+.container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+h1 { font-size:1.5rem; margin-bottom:0.5rem; }
+p.instructions { font-size:0.95rem; color:#444; }
+table { width:100%; border-collapse:collapse; margin-top:1rem; }
+th, td { padding:10px; border-bottom:1px solid #eee; vertical-align:top; }
+input[type="number"] { width:80px; padding:5px; font-size:1rem; }
+button { margin-top:20px; padding:10px 20px; font-size:1rem; border:none; border-radius:5px; background:#007aff; color:#fff; cursor:pointer; }
+button:hover { background:#005fcc; }
+.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5); }
+.modal-content { background-color:#fff; margin:10% auto; padding:20px; border-radius:10px; width:90%; max-width:400px; text-align:center; }
+.close { color:#aaa; float:right; font-size:28px; font-weight:bold; }
+.close:hover, .close:focus { color:black; text-decoration:none; cursor:pointer; }
+.result-score { font-size:1.5rem; font-weight:bold; margin:10px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>活動特異性平衡信心量表（ABC量表）</h1>
+<p class="instructions">請根據您對完成下列活動時「不會跌倒」的信心程度，以百分比（0–100%）填寫每一項目。</p>
+<table>
+<tr><th>項目</th><th>活動描述</th><th>信心百分比 (%)</th></tr>
+<tr><td>1</td><td>走在屋內</td><td><input type="number" name="q1" min="0" max="100"></td></tr>
+<tr><td>2</td><td>走上或走下樓梯</td><td><input type="number" name="q2" min="0" max="100"></td></tr>
+<tr><td>3</td><td>彎腰撿起地上的物品</td><td><input type="number" name="q3" min="0" max="100"></td></tr>
+<tr><td>4</td><td>站在椅子上拿東西</td><td><input type="number" name="q4" min="0" max="100"></td></tr>
+<tr><td>5</td><td>掃地或拖地</td><td><input type="number" name="q5" min="0" max="100"></td></tr>
+<tr><td>6</td><td>走到鄰近的信箱</td><td><input type="number" name="q6" min="0" max="100"></td></tr>
+<tr><td>7</td><td>走在停車場</td><td><input type="number" name="q7" min="0" max="100"></td></tr>
+<tr><td>8</td><td>走在商場或超市</td><td><input type="number" name="q8" min="0" max="100"></td></tr>
+<tr><td>9</td><td>走在斜坡上</td><td><input type="number" name="q9" min="0" max="100"></td></tr>
+<tr><td>10</td><td>走在不平的路面上</td><td><input type="number" name="q10" min="0" max="100"></td></tr>
+<tr><td>11</td><td>橫過馬路</td><td><input type="number" name="q11" min="0" max="100"></td></tr>
+<tr><td>12</td><td>在擁擠的地方走動</td><td><input type="number" name="q12" min="0" max="100"></td></tr>
+<tr><td>13</td><td>在沒有扶手的情況下上下電梯</td><td><input type="number" name="q13" min="0" max="100"></td></tr>
+<tr><td>14</td><td>在公共交通工具上移動</td><td><input type="number" name="q14" min="0" max="100"></td></tr>
+<tr><td>15</td><td>在夜間走在熟悉的環境中</td><td><input type="number" name="q15" min="0" max="100"></td></tr>
+<tr><td>16</td><td>在夜間走在不熟悉的環境中</td><td><input type="number" name="q16" min="0" max="100"></td></tr>
+</table>
+<button onclick="calculateABC()">計算總分</button>
+</div>
+
+<div id="resultModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p>您的 ABC 平衡信心平均分數為：</p>
+    <div class="result-score" id="abcScore">0%</div>
+    <div id="riskLevel"></div>
+  </div>
+</div>
+
+<script>
+function calculateABC() {
+  let total = 0;
+  let count = 0;
+  for (let i = 1; i <= 16; i++) {
+    const val = document.getElementsByName('q' + i)[0].value;
+    if (val !== '') {
+      total += parseFloat(val);
+      count++;
+    }
+  }
+  if (count === 0) {
+    alert("請至少填寫一項目");
+    return;
+  }
+  const avg = total / count;
+  document.getElementById('abcScore').textContent = avg.toFixed(1) + '%';
+  let risk = '';
+  if (avg < 67) {
+    risk = '⚠️ 跌倒風險較高，建議進一步評估。';
+  } else {
+    risk = '✅ 平衡信心良好。';
+  }
+  document.getElementById('riskLevel').textContent = risk;
+  document.getElementById('resultModal').style.display = 'block';
+}
+function closeModal() {
+  document.getElementById('resultModal').style.display = 'none';
+}
+</script>
+</body>
+</html>
